@@ -14,16 +14,23 @@ SQUARE_SIZE = 20
 START_LENGTH = 7
 TIME_STEP = 100
 
+
 #Initialize lists
 pos_list = []
+pos_list_1=[]
 stamp_list = []
+stamp_list_1=[]
 food_pos = []
 food_stamps = []
 
 #Set up positions (x,y) of boxes that make up the snake
+snake_1=turtle.clone()
 snake = turtle.clone()
 snake.shape("square")
-
+snake.color("green")
+snake_1.shape("square")
+snake_1.color("red")
+turtle.bgcolor('black')
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
 
@@ -31,25 +38,33 @@ turtle.hideturtle()
 
 def new_stamp():
     snake_pos = snake.pos() #Get snake’s position
+    snake_pos_1=snake_1.pos()
     #Append the position tuple to pos_list
-    pos_list.append(snake_pos) 
+    pos_list.append(snake_pos)
+    pos-list_1.append(snake_pos_1)
+    
     #snake.stamp() returns a stamp ID. Save it in some variable         
     s_id= snake.stamp()
+    s_id_1=snake_1.stamp()
     #append that stamp ID to stamp_list.     
     stamp_list.append(s_id)
+    stamp_list_1.append(s_id_1)
 
 #Draw a snake at the start of the game with a for loop
 #for loop should use range() and count up to the number of pieces
 #in the snake (i.e. START_LENGTH)
 for snake_start in range(START_LENGTH) :
     x_pos=snake.pos()[0]#Get x-position with snake.pos()[0]
-    y_pos=snake.pos()[1] 
+    y_pos=snake.pos()[1]
+    x_pos_1=snake_1.pos()[0]
+    y_pos_1=snake_1.pos()[1]
 
     #Add SQUARE_SIZE to x_pos. Where does x_pos point to now?    
     # You're RIGHT!
     x_pos+= SQUARE_SIZE
-
+    x_pos_1+=SQUARE_SIZE
     snake.goto(x_pos,y_pos) #Move snake to new (x,y)
+    snake_1.goto(x_pos_1,y_pos_1)
    
     #Now draw the new snake part on the screen (hint, you have a 
     #function to do this
@@ -59,6 +74,10 @@ def remove_tail():
     old_stamp = stamp_list.pop(0) # last piece of tail
     snake.clearstamp(old_stamp) # erase last piece of tail
     pos_list.pop(0) # remove last piece of tail's position
+    old_stamp_1= stamp_list_1.pop(0) # last piece of tail
+    snake_1.clearstamp(old_stamp_1) # erase last piece of tail
+    pos_list_1.pop(0) # remove last piece of tail's position
+    
 
 
 snake.direction = "Up"
@@ -86,6 +105,25 @@ def left():
 def right():
     snake.direction="Right" #Change direction to up
     print("You pressed the right key!")
+
+def w():
+    snake_1.direction="Up" #Change direction to up
+    print("You pressed the up(w) key!")
+
+#2. Make functions down(), left(), and right() that change snake.direction
+####WRITE YOUR CODE HERE!!
+
+def s():
+    snake_1.direction="Down" #Change direction to up
+    print("You pressed the down(s) key!")
+
+def a():
+    snake_1.direction="Left" #Change direction to up
+    print("You pressed the left(a) key!")
+
+def d():
+    snake_1.direction="Right" #Change direction to up
+    print("You pressed the right(d) key!")
     
 
 turtle.onkeypress(up, "Up") # Create listener for up key
@@ -97,15 +135,24 @@ turtle.onkeypress(down, "Down")
 turtle.onkeypress(left, "Left")
 turtle.onkeypress(right, "Right")
 
+turtle.onkeypress(up, "W") # Create listener for up key
+
+#3. Do the same for the other arrow keys
+####WRITE YOUR CODE HERE!!
+
+turtle.onkeypress(down, "S")
+turtle.onkeypress(left, "A")
+turtle.onkeypress(right, "D")
+
 turtle.listen()
 
-turtle.register_shape("trash.gif") #Add trash picture
+turtle.register_shape("ap.gif") #Add trash picture
                       # Make sure you have downloaded this shape 
                       # from the Google Drive folder and saved it
                       # in the same folder as this Python script
 
 food = turtle.clone()
-food.shape("trash.gif") 
+food.shape("ap.gif") 
 
 #Locations of food
 food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
@@ -127,11 +174,28 @@ def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
+    my_pos_1=snake_1.pos()
+    x_pos_1=my_pos_1[0]
+    y_pos_1=my_pos_1[0]
     
     #If snake.direction is up, then we want the snake to change
     #it’s y position by SQUARE_SIZE
     if snake.direction == "Up":
         snake.goto(x_pos, y_pos + SQUARE_SIZE)
+    elif snake.direction=="Down":
+        snake.goto(x_pos, y_pos - SQUARE_SIZE)
+    
+
+    #4. Write the conditions for RIGHT and LEFT on your own
+    ##### YOUR CODE HERE
+
+    if snake.direction=="Left":
+        snake.goto(x_pos-SQUARE_SIZE,y_pos)
+    elif snake.direction=="Right":
+        snake.goto(x_pos+SQUARE_SIZE,y_pos)
+
+if snake_1.direction == "Up":
+        snake_1.goto(x_pos_1, y_pos _1+ SQUARE_SIZE)
     elif snake.direction=="Down":
         snake.goto(x_pos, y_pos - SQUARE_SIZE)
     
@@ -156,7 +220,8 @@ def move_snake():
         food_pos.pop(food_index) #Remove eaten food position
         food_stamps.pop(food_index) #Remove eaten food stamp
         print("You have eaten the food!")
-        
+    else:
+        remove_tail()
         #HINT: This if statement may be useful for Part 8
         
     ...
@@ -169,9 +234,6 @@ def move_snake():
     
 
     #remove the last piece of the snake (Hint Functions are FUN!)
-    if snake.pos in food_pos:
-        pass 
-    remove_tail()
     #Grab position of snake
     new_pos = snake.pos()
     new_x_pos = new_pos[0]
