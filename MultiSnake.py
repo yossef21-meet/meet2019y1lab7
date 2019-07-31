@@ -4,8 +4,8 @@ import random #We'll need this later in the lab
 
 turtle.tracer(1,0) #This helps the turtle move more smoothly
 
-SIZE_X=800
-SIZE_Y=500
+SIZE_X=1500
+SIZE_Y=800
 turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window  
                              #size.    
 turtle.penup()
@@ -41,7 +41,7 @@ def new_stamp():
     snake_pos_1=snake_1.pos()
     #Append the position tuple to pos_list
     pos_list.append(snake_pos)
-    pos-list_1.append(snake_pos_1)
+    pos_list_1.append(snake_pos_1)
     
     #snake.stamp() returns a stamp ID. Save it in some variable         
     s_id= snake.stamp()
@@ -194,19 +194,19 @@ def move_snake():
     elif snake.direction=="Right":
         snake.goto(x_pos+SQUARE_SIZE,y_pos)
 
-if snake_1.direction == "Up":
-        snake_1.goto(x_pos_1, y_pos _1+ SQUARE_SIZE)
-    elif snake.direction=="Down":
-        snake.goto(x_pos, y_pos - SQUARE_SIZE)
+    if snake_1.direction == "Up":
+        snake_1.goto(x_pos_1, y_pos_1+ SQUARE_SIZE)
+    elif snake_1.direction=="Down":
+        snake_1.goto(x_pos_1, y_pos_1 - SQUARE_SIZE)
     
 
     #4. Write the conditions for RIGHT and LEFT on your own
     ##### YOUR CODE HERE
 
-    if snake.direction=="Left":
-        snake.goto(x_pos-SQUARE_SIZE,y_pos)
-    elif snake.direction=="Right":
-        snake.goto(x_pos+SQUARE_SIZE,y_pos)
+    if snake_1.direction=="Left":
+        snake_1.goto(x_pos_1-SQUARE_SIZE,y_pos_1)
+    elif snake_1.direction=="Right":
+        snake_1.goto(x_pos_1+SQUARE_SIZE,y_pos_1)
 
     #Make the snake stamp a new square on the screen
     #Hint - use a single function to do this
@@ -223,7 +223,14 @@ if snake_1.direction == "Up":
     else:
         remove_tail()
         #HINT: This if statement may be useful for Part 8
-        
+    if snake_1.pos() in food_pos:
+        food_index=food_pos.index(snake_1.pos()) #What does this do?
+        food.clearstamp(food_stamps[food_index]) #Remove eaten food stamp
+        food_pos.pop(food_index) #Remove eaten food position
+        food_stamps.pop(food_index) #Remove eaten food stamp
+        print("You have eaten the food!")
+    else:
+        remove_tail()   
     ...
     #Don't change the rest of the code in move_snake() function:
     #If you have included the timer so the snake moves 
@@ -238,6 +245,10 @@ if snake_1.direction == "Up":
     new_pos = snake.pos()
     new_x_pos = new_pos[0]
     new_y_pos = new_pos[1]
+
+    new_pos_1 = snake_1.pos()
+    new_x_pos_1 = new_pos_1[0]
+    new_y_pos_1 = new_pos_1[1]
      # The next three lines check if the snake is hitting the 
     # right edge.
     if new_x_pos >= RIGHT_EDGE:
